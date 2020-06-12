@@ -13,7 +13,7 @@ data "aws_vpc" "default" {
 }
 
 module "airflow_cluster" {
-  source            = "../../"
+  source            = "terraform-aws-airflow"
   cluster_name      = "airflow-example-deploy"
   s3_bucket_name    = "airflow-example-deploy-logs"
   db_password       = "123456789A*"                                  # Just for example purposes, for real projects you may want to create a terraform.tfvars file
@@ -74,7 +74,7 @@ module "aws_key_pair" {
 }
 
 module "emr_cluster" {
-  source                                         = "../../"
+  source                                         = "terraform-aws-emr-cluster"
   namespace                                      = var.namespace
   stage                                          = var.stage
   name                                           = var.name
