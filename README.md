@@ -2,7 +2,7 @@
 
 Terraform code to deploy a recommendation engine with Apache Airflow cluster to schedule Spark jobs.
 
-![](architecture.png) 
+![](architecture.png)
 
 ## Reference Module
 
@@ -17,8 +17,12 @@ terraform init
 terraform apply -var-file="example.tfvars"
 
 ```
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
 
 ## Inputs
 
 ## Outputs
-
