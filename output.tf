@@ -1,44 +1,44 @@
 # airflow
-output "webserver_admin_url" {
-  description = "Public DNS for the Airflow Webserver instance"
-  value       = "${module.airflow_cluster.webserver_admin_url}"
-}
-
-output "webserver_public_ip" {
-  description = "Public IP address for the Airflow Webserver instance"
-  value       = "${module.airflow_cluster.webserver_public_ip}"
-}
-
-output "this_cluster_security_group_id" {
-  description = "The ID of the security group"
-  value       = "${module.airflow_cluster.this_cluster_security_group_id}"
-}
-
-output "this_database_security_group_id" {
-  description = "The ID of the security group"
-  value       = "${module.airflow_cluster.this_database_security_group_id}"
-}
-
-output "database_endpoint" {
-  description = "Endpoint to connect to RDS metadata DB"
-  value       = "${module.airflow_cluster.database_endpoint}"
-}
-
-output "database_username" {
-  description = "Username to connect to RDS metadata DB"
-  value       = "${module.airflow_cluster.database_username}"
-}
+//output "webserver_admin_url" {
+//  description = "Public DNS for the Airflow Webserver instance"
+//  value       = module.airflow_cluster.webserver_admin_url
+//}
+//
+//output "webserver_public_ip" {
+//  description = "Public IP address for the Airflow Webserver instance"
+//  value       = module.airflow_cluster.webserver_public_ip
+//}
+//
+//output "this_cluster_security_group_id" {
+//  description = "The ID of the security group"
+//  value       = module.airflow_cluster.this_cluster_security_group_id
+//}
+//
+//output "this_database_security_group_id" {
+//  description = "The ID of the security group"
+//  value       = module.airflow_cluster.this_database_security_group_id
+//}
+//
+//output "database_endpoint" {
+//  description = "Endpoint to connect to RDS metadata DB"
+//  value       = module.airflow_cluster.database_endpoint
+//}
+//
+//output "database_username" {
+//  description = "Username to connect to RDS metadata DB"
+//  value       = module.airflow_cluster.database_username
+//}
 
 # emr
-output "public_subnet_cidrs" {
-  value       = module.subnets.public_subnet_cidrs
-  description = "Public subnet CIDRs"
-}
-
-output "private_subnet_cidrs" {
-  value       = module.subnets.private_subnet_cidrs
-  description = "Private subnet CIDRs"
-}
+//output "public_subnet_cidrs" {
+//  value       = module.subnets.public_subnet_cidrs
+//  description = "Public subnet CIDRs"
+//}
+//
+//output "private_subnet_cidrs" {
+//  value       = module.subnets.private_subnet_cidrs
+//  description = "Private subnet CIDRs"
+//}
 
 output "vpc_cidr" {
   value       = module.vpc.vpc_cidr_block

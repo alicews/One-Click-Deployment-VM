@@ -1,4 +1,4 @@
-region = "us-west-2"
+aws_region = "us-west-2"
 
 availability_zones = ["us-west-2a"]
 
@@ -39,6 +39,7 @@ master_instance_group_ebs_volumes_per_instance = 1
 
 create_task_instance_group = false
 
-ssh_public_key_path = "～/.ssh"
+ssh_public_key_path = "/home/rob/.ssh/testing.pub"
+private_key_path    = "/home/rob/.ssh/testing"
 
 generate_ssh_key = true

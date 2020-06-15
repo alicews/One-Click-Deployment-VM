@@ -1,6 +1,7 @@
-variable "region" {
+variable "aws_region" {
   type        = string
   description = "AWS region"
+  default     = "us-west-2"
 }
 
 variable "availability_zones" {
@@ -109,7 +110,30 @@ variable "ssh_public_key_path" {
   description = "Path to SSH public key directory (e.g. `/secrets`)"
 }
 
+variable "private_key_path" {
+  type        = string
+  description = "The path to private key."
+}
+
 variable "generate_ssh_key" {
   type        = bool
   description = "If set to `true`, new SSH key pair will be created"
+}
+
+
+// Network
+
+variable "subnet_type" {
+  description = "public or porivate subnet"
+  type        = string
+  default     = "public"
+}
+
+
+// Superset
+
+variable "superset_root_volume_size" {
+  description = ""
+  type        = number
+  default     = 8
 }

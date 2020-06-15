@@ -1,1 +1,13 @@
-ansible-superset-playbook/
+
+.idea
+
+# Terraform and terragrunt
+*.tfstate*
+*.tfstate.backup
+*.tfplan
+.terragrunt-cache/
+.terraform/
+
+terraform.tfvars
+ansible/roles/airflow-role
+

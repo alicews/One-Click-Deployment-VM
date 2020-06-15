@@ -3,59 +3,43 @@
 #################################
 
 provider "aws" {
-  region = "us-west-1"
+  region = var.aws_region
 }
 
 
 # Data sources to get VPC details
-data "aws_vpc" "default" {
-  default = true
+//data "aws_vpc" "default" {
+//  default = true
+//}
+
+
+variable "fernet_key" {
+  description = ""
+  type        = string
+  default     = "HeY9Aivs7vADx5oy7SBKHfRJdj3fhpD_6IX2LnlDN74"
 }
 
-module "airflow_cluster" {
-  source            = "terraform-aws-airflow/"
-  cluster_name      = "airflow-example-deploy"
-  s3_bucket_name    = "airflow-example-deploy-logs"
-  db_password       = "123456789A*"                                  # Just for example purposes, for real projects you may want to create a terraform.tfvars file
-  fernet_key        = "HeY9Aivs7vADx5oy7SBKHfRJdj3fhpD_6IX2LnlDN74=" # Just for example purposes, for real projects you may want to create a terraform.tfvars file
-  key_name          = "airflow-example-deploy-key"
-  load_example_dags = false
-}
+//module "airflow_cluster" {
+//  source            = "./terraform-aws-airflow"
+//  cluster_name      = "airflow-example-deploy"# Put in variable
+//  s3_bucket_name    = "airflow-example-deploy-logs"# Put in variable
+//  db_password       = "123456789A*"# Put in variable                                   # Just for example purposes, for real projects you may want to create a terraform.tfvars file
+////  fernet_key        = "HeY9Aivs7vADx5oy7SBKHfRJdj3fhpD_6IX2LnlDN74=" # Just for example purposes, for real projects you may want to create a terraform.tfvars file
+//  fernet_key = var.fernet_key
+//  key_name          = module.aws_key_pair.key_name
+//  load_example_dags = false
+//
+//  vpc_id = module.aws_vpc.vpc_id
+//}
 
 
 #################################
 # EMR
 #################################
 
-
-provider "aws" {
-  region = var.region
-}
-
-module "vpc" {
-  source     = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.7.0"
-  namespace  = var.namespace
-  stage      = var.stage
-  name       = var.name
-  cidr_block = "172.16.0.0/16"
-}
-
-module "subnets" {
-  source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.16.0"
-  availability_zones   = var.availability_zones
-  namespace            = var.namespace
-  stage                = var.stage
-  name                 = var.name
-  vpc_id               = module.vpc.vpc_id
-  igw_id               = module.vpc.igw_id
-  cidr_block           = module.vpc.vpc_cidr_block
-  nat_gateway_enabled  = false
-  nat_instance_enabled = false
-}
-
 module "s3_log_storage" {
   source        = "git::https://github.com/cloudposse/terraform-aws-s3-log-storage.git?ref=tags/0.5.0"
-  region        = var.region
+  region        = var.aws_region
   namespace     = var.namespace
   stage         = var.stage
   name          = var.name
@@ -63,28 +47,25 @@ module "s3_log_storage" {
   force_destroy = true
 }
 
-module "aws_key_pair" {
-  source              = "git::https://github.com/cloudposse/terraform-aws-key-pair.git?ref=tags/0.4.0"
-  namespace           = var.namespace
-  stage               = var.stage
-  name                = var.name
-  attributes          = ["ssh", "key"]
-  ssh_public_key_path = var.ssh_public_key_path
-  generate_ssh_key    = var.generate_ssh_key
-}
-
 module "emr_cluster" {
-  source                                         = "terraform-aws-emr-cluster/"
-  namespace                                      = var.namespace
-  stage                                          = var.stage
-  name                                           = var.name
-  master_allowed_security_groups                 = [module.vpc.vpc_default_security_group_id]
-  slave_allowed_security_groups                  = [module.vpc.vpc_default_security_group_id]
-  region                                         = var.region
-  vpc_id                                         = module.vpc.vpc_id
-  subnet_id                                      = module.subnets.private_subnet_ids[0]
-  route_table_id                                 = module.subnets.private_route_table_ids[0]
-  subnet_type                                    = "private"
+  source    = "github.com/cloudposse/terraform-aws-emr-cluster"
+  namespace = var.namespace
+  stage     = var.stage
+  name      = var.name
+
+  //  master_allowed_security_groups                 = [module.vpc.vpc_default_security_group_id]
+  //  slave_allowed_security_groups                  = [module.vpc.vpc_default_security_group_id]
+
+  region = var.aws_region
+
+  vpc_id = module.aws_vpc.vpc_id
+  //  subnet_id                                      = module.subnets.private_subnet_ids[0]
+  subnet_id = module.aws_vpc.public_subnets[0]
+
+  //  route_table_id                                 = module.subnets.private_route_table_ids[0]
+  route_table_id = module.aws_vpc.public_route_table_ids[0]
+  subnet_type    = var.subnet_type
+
   ebs_root_volume_size                           = var.ebs_root_volume_size
   visible_to_all_users                           = var.visible_to_all_users
   release_label                                  = var.release_label
@@ -101,6 +82,7 @@ module "emr_cluster" {
   master_instance_group_ebs_type                 = var.master_instance_group_ebs_type
   master_instance_group_ebs_volumes_per_instance = var.master_instance_group_ebs_volumes_per_instance
   create_task_instance_group                     = var.create_task_instance_group
-  log_uri                                        = format("s3://%s", module.s3_log_storage.bucket_id)
-  key_name                                       = module.aws_key_pair.key_name
+
+  log_uri  = format("s3://%s", module.s3_log_storage.bucket_id)
+  key_name = module.aws_key_pair.key_name
 }
