@@ -30,8 +30,11 @@ terraform apply -var-file="example.tfvars"
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
+| airflow\_instance\_type | n/a | `string` | `"t3.medium"` | no |
+| airflow\_root\_volume\_size | n/a | `number` | `8` | no |
 | applications | A list of applications for the cluster. Valid values are: Flink, Ganglia, Hadoop, HBase, HCatalog, Hive, Hue, JupyterHub, Livy, Mahout, MXNet, Oozie, Phoenix, Pig, Presto, Spark, Sqoop, TensorFlow, Tez, Zeppelin, and ZooKeeper (as of EMR 5.25.0). Case insensitive | `list(string)` | n/a | yes |
 | availability\_zones | List of availability zones | `list(string)` | n/a | yes |
+| aws\_region | AWS region | `string` | `"us-west-2"` | no |
 | configurations\_json | A JSON string for supplying list of configurations for the EMR cluster | `string` | `""` | no |
 | core\_instance\_group\_ebs\_size | Core instances volume size, in gibibytes (GiB) | `number` | n/a | yes |
 | core\_instance\_group\_ebs\_type | Core instances volume type. Valid options are `gp2`, `io1`, `standard` and `st1` | `string` | n/a | yes |
@@ -40,6 +43,7 @@ terraform apply -var-file="example.tfvars"
 | core\_instance\_group\_instance\_type | EC2 instance type for all instances in the Core instance group | `string` | n/a | yes |
 | create\_task\_instance\_group | Whether to create an instance group for Task nodes. For more info: https://www.terraform.io/docs/providers/aws/r/emr_instance_group.html, https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-master-core-task-nodes.html | `bool` | n/a | yes |
 | ebs\_root\_volume\_size | Size in GiB of the EBS root device volume of the Linux AMI that is used for each EC2 instance. Available in Amazon EMR version 4.x and later | `number` | n/a | yes |
+| fernet\_key | n/a | `string` | `"HeY9Aivs7vADx5oy7SBKHfRJdj3fhpD_6IX2LnlDN74"` | no |
 | generate\_ssh\_key | If set to `true`, new SSH key pair will be created | `bool` | n/a | yes |
 | master\_instance\_group\_ebs\_size | Master instances volume size, in gibibytes (GiB) | `number` | n/a | yes |
 | master\_instance\_group\_ebs\_type | Master instances volume type. Valid options are `gp2`, `io1`, `standard` and `st1` | `string` | n/a | yes |
@@ -48,10 +52,12 @@ terraform apply -var-file="example.tfvars"
 | master\_instance\_group\_instance\_type | EC2 instance type for all instances in the Master instance group | `string` | n/a | yes |
 | name | Name  (e.g. `app` or `cluster`) | `string` | n/a | yes |
 | namespace | Namespace (e.g. `eg` or `cp`) | `string` | n/a | yes |
-| region | AWS region | `string` | `"us-east-1"` | no |
+| private\_key\_path | The path to private key. | `string` | n/a | yes |
 | release\_label | The release label for the Amazon EMR release. https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-release-5x.html | `string` | n/a | yes |
 | ssh\_public\_key\_path | Path to SSH public key directory (e.g. `/secrets`) | `string` | n/a | yes |
 | stage | Stage (e.g. `prod`, `dev`, `staging`, `infra`) | `string` | n/a | yes |
+| subnet\_type | public or porivate subnet | `string` | `"public"` | no |
+| superset\_root\_volume\_size | n/a | `number` | `8` | no |
 | visible\_to\_all\_users | Whether the job flow is visible to all IAM users of the AWS account associated with the job flow | `bool` | n/a | yes |
 
 ## Outputs
@@ -68,18 +74,10 @@ terraform apply -var-file="example.tfvars"
 | cluster\_master\_security\_group\_id | Master security group ID |
 | cluster\_name | EMR cluster name |
 | cluster\_slave\_security\_group\_id | Slave security group ID |
-| database\_endpoint | Endpoint to connect to RDS metadata DB |
-| database\_username | Username to connect to RDS metadata DB |
-| private\_subnet\_cidrs | Private subnet CIDRs |
-| public\_subnet\_cidrs | Public subnet CIDRs |
 | s3\_log\_storage\_bucket\_arn | Bucket ARN |
 | s3\_log\_storage\_bucket\_domain\_name | FQDN of bucket |
 | s3\_log\_storage\_bucket\_id | Bucket Name (aka ID) |
-| this\_cluster\_security\_group\_id | The ID of the security group |
-| this\_database\_security\_group\_id | The ID of the security group |
 | vpc\_cidr | VPC ID |
-| webserver\_admin\_url | Public DNS for the Airflow Webserver instance |
-| webserver\_public\_ip | Public IP address for the Airflow Webserver instance |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
